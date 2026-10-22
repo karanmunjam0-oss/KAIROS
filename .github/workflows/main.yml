@@ -1,0 +1,30 @@
+name: Top-G 24-7 Scanner
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 */5 * * *'
+
+jobs:
+  run-scanner:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Libraries
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Top-G Scanner
+        continue-on-error: true
+        run: |
+          python main.py
